@@ -1,0 +1,74 @@
+.section-login{
+    @include flex(column, center, center);
+    background-color: $color-mint-01;
+
+.login-area{
+    @include flex(column, center, center);
+    background-color: $color-white;
+    padding: 10rem 5rem; 
+    border-radius: 1rem;
+}
+
+    .login-title{
+        font-size: $font-medium-lg;
+        font-weight: $weight-bold;
+        color: $color-gray-01;
+    }
+
+    .login-form-area{
+        @include flex(column, center, center);
+        width: 100%;
+        height: 100%;
+        margin-top: 7rem;
+
+        .login-form{
+            @include flex(column, center, center);
+            width: 100%;
+            height: 100%;
+         
+            .form-row-area{
+                @include flex(row, flex-end, center);
+                width: 100%;
+                margin-bottom: 2rem;
+            
+                .login-label{
+                    text-align: right;
+                    width: 30%;
+                    font-size: $font-regular;
+                    font-weight: $weight-semi-bold;
+                    color: $color-gray-01;   
+                }
+                .login-input{
+                    width: 70%;
+                    margin-left: 2rem;
+                    padding: 0.5rem;
+                    border-bottom: 2px solid $color-mint-01;
+                    transition: all 0.5s ease-in-out;
+                    
+                    &:focus, &:active{
+                        outline: none !important;
+                        border-bottom: 2px solid $color-pink-01
+                    }
+                }
+            }
+        }
+
+        .login-btn{
+            padding: 1rem 3rem;
+            border: 2px solid $color-mint-01;
+            border-radius: 1rem;
+            background-color: $color-mint-01;
+            color: $color-white;
+            font-size: $font-regular-sm;
+            font-weight: $weight-semi-bold;
+            margin-top: 4rem;
+            transition: all 0.5s ease-in-out;
+
+            &:hover{
+                border: 2px solid $color-pink-01;
+                background-color: $color-pink-01;
+            }
+        }
+    }
+}
+

@@ -88,39 +88,52 @@ function Login() {
       {success ? (
         <Calendar></Calendar>
       ) : (
-        <section>
-          <p
-            ref={errRef}
-            className={errMsg ? "errmsg" : "offscreen"}
-            aria-live="assertive"
-          >
-            {errMsg}
-          </p>
+        <section className="section-default section-login">
+          <div className="login-area">
+            <h1 className="login-title">Calendar</h1>
 
-          <h1>Sign in</h1>
-          <form onSubmit={handlesubmit}>
-            <label htmlFor="uid">ID</label>
-            <input
-              type="text"
-              ref={idRef}
-              id="uid"
-              autoComplete="off"
-              onChange={onIdChange}
-              value={id}
-              required
-            />
+            <div className="login-form-area">
+              <p
+                ref={errRef}
+                className={errMsg ? "errmsg" : "offscreen"}
+                aria-live="assertive"
+              >
+                {errMsg}
+              </p>
 
-            <label htmlFor="upasswd">PASSWORD</label>
-            <input
-              type="password"
-              id="upasswd"
-              onChange={onPasswdChange}
-              value={pwd}
-              required
-            />
-
-            <button>Sign In</button>
-          </form>
+              <form className="login-form" onSubmit={handlesubmit}>
+                <div className="form-row-area">
+                  <label className="login-label" htmlFor="uid">
+                    ID
+                  </label>
+                  <input
+                    className="login-input"
+                    type="text"
+                    ref={idRef}
+                    id="uid"
+                    autoComplete="off"
+                    onChange={onIdChange}
+                    value={id}
+                    required
+                  />
+                </div>
+                <div className="form-row-area">
+                  <label className="login-label" htmlFor="upasswd">
+                    PASSWORD
+                  </label>
+                  <input
+                    className="login-input"
+                    type="password"
+                    id="upasswd"
+                    onChange={onPasswdChange}
+                    value={pwd}
+                    required
+                  />
+                </div>
+                <button className="login-btn">Sign In</button>
+              </form>
+            </div>
+          </div>
         </section>
       )}
     </>
