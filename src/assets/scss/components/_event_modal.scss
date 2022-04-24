@@ -1,0 +1,14 @@
+.event-modal-area{
+    display:flex;
+    position: fixed;
+    top:0;
+    left:0;
+    width: 30rem;
+    height: 40rem;
+    background-color: $color-white;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+    padding: 4rem 4rem;
+    z-index: 9999;
+}
+

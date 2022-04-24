@@ -3,15 +3,15 @@ import Day from "./Day";
 
 function Month({ month }) {
   return (
-    <div className="test">
+    <div className="month-area">
       {month.map((row, index) => {
         return (
-          <React.Fragment key={index}>
+          <div className="week-area" key={index}>
             {row.map((day, idx) => {
-              return <Day day={day} key={idx} />;
+              return <Day day={day} key={idx} rowIdx={index} />;
             })}
-          </React.Fragment>
-        ); //not use the real DOM element
+          </div>
+        );
       })}
     </div>
   );

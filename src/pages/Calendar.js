@@ -1,29 +1,29 @@
-import { useRef, useState, useEffect } from "react";
-import Logout from "./Logout";
-import { getMonth, getTest } from "./../utils/util-calendar";
+import { useState, useContext, useEffect } from "react";
+import { getMonth } from "./../utils/util-calendar";
+import GlobalContext from "../context/GlobalContext";
 import CalendarHeader from "../components/CalendarHeader";
 import Sidebar from "../components/Sidebar";
 import Month from "../components/Month";
+import EventModal from "../components/EventModal";
 
 function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(getMonth());
-  // const { monthIndex, showEventModal } = useContext(GlobalContext);
+  const { monthIndex, showEventModal } = useContext(GlobalContext);
 
-  // useEffect(() => {
-  //   setCurrentMonth(getMonth(monthIndex));
-  // }, [monthIndex]);
-
-  console.table(getMonth(3));
+  useEffect(() => {
+    setCurrentMonth(getMonth(monthIndex));
+  }, [monthIndex]);
 
   return (
-    <section>
+    <section className="section-default">
+      {showEventModal && <EventModal />}
       <CalendarHeader />
-      <h1>Calendar</h1>
-      <div>
+      <div className="calendar-main-area">
         <Sidebar />
-        <Month month={currentMonth} />
+        <div className="calendar-area">
+          <Month month={currentMonth} />
+        </div>
       </div>
-      <Logout />
     </section>
   );
 }

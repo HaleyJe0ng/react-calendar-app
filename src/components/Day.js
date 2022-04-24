@@ -1,10 +1,61 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
+import dayjs from "dayjs";
+import EventModal from "./EventModal";
+import GlobalContext from "./../context/GlobalContext";
 
-function Day({ day }) {
+function Day({ day, rowIdx }) {
+  const [dayEvents, setDayEvents] = useState([]);
+
+  const { setDaySelected, setShowEventModal, savedEvents, setSelectedEvent } =
+    useContext(GlobalContext);
+
+  useEffect(() => {
+    const events = savedEvents.filter(
+      (event) => dayjs(event.day).format("DD-MM-YY") === day.format("DD-MM-YY")
+    ); //create new dayjs objects
+    setDayEvents(events);
+  }, [savedEvents, day]);
+
+  const getCurrentDayClass = () => {
+    //Check current day
+    return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")
+      ? "today-dot"
+      : "";
+  };
+
   return (
-    <div>
-      <p>{day.format("ddd").toUpperCase()}</p>
-      <p>{day.format("DD")}</p>
+    <div className="day">
+      <header
+        className="dayheader"
+        onClick={() => {
+          setDaySelected(day);
+          setSelectedEvent(null);
+          setShowEventModal(true);
+        }}
+      >
+        {rowIdx === 0 && <p>{day.format("ddd").toUpperCase()}</p>}
+
+        <p className={`${getCurrentDayClass()}`}>{day.format("DD")}</p>
+      </header>
+      <div className="daySelected">
+        {dayEvents.map((event, idx) => {
+          return (
+            <div
+              key={idx}
+              onClick={() => {
+                setSelectedEvent(event);
+                setDaySelected(day);
+                setShowEventModal(true);
+              }}
+              className={`event bg-${event.label}`}
+            >
+              {event.title}
+
+              {/* 여기서 자꾸 title이 잘못 넘어감...! */}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

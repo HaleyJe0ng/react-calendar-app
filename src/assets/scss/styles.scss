@@ -9,7 +9,10 @@
 
 // components
 @import "./components/calendar_header";
+@import "./components/sidebar";
+@import "./components/event_modal";
 
 // pages
 @import "./pages/login";
+@import "./pages/calendar";
 

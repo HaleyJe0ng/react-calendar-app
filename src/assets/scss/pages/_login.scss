@@ -5,7 +5,7 @@
 .login-area{
     @include flex(column, center, center);
     background-color: $color-white;
-    padding: 10rem 5rem; 
+    padding: 10rem 9rem; 
     border-radius: 1rem;
 }
 
@@ -44,7 +44,7 @@
                     padding: 0.5rem;
                     border-bottom: 2px solid $color-mint-01;
                     transition: all 0.5s ease-in-out;
-                    
+
                     &:focus, &:active{
                         outline: none !important;
                         border-bottom: 2px solid $color-pink-01

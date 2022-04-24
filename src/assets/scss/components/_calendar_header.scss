@@ -1,0 +1,5 @@
+.calendar-header-area{
+    width: 100%;
+    height: $header-height;
+    @include flex(row, space-between, center);
+}

@@ -19,10 +19,6 @@ function Login() {
     setErrMsg("");
   }, [id, pwd]);
 
-  useEffect(() => {
-    setUserKey(sessionStorage.getItem(STORAGE_USER_CHECK));
-  }, [userKey]);
-
   const onIdChange = (e) => setId(e.target.value);
   const onPasswdChange = (e) => setPwd(e.target.value);
 
