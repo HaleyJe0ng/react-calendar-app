@@ -1,16 +1,15 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import axios from "axios";
-import Calendar from "./Calendar";
+import GlobalContext from "./../context/GlobalContext";
 const URL = "http://15.164.213.157/database/login.php";
-const STORAGE_USER_CHECK = "user_key";
 
 function Login() {
+  const { userKey, setUserKey, STORAGE_USER_CHECK } = useContext(GlobalContext);
   const idRef = useRef();
   const errRef = useRef();
   const [id, setId] = useState("");
   const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     idRef.current.focus();
@@ -20,11 +19,14 @@ function Login() {
     setErrMsg("");
   }, [id, pwd]);
 
+  useEffect(() => {
+    setUserKey(sessionStorage.getItem(STORAGE_USER_CHECK));
+  }, [userKey]);
+
   const onIdChange = (e) => setId(e.target.value);
   const onPasswdChange = (e) => setPwd(e.target.value);
 
   const serverRes = (res) => {
-    setSuccess(false);
     switch (res) {
       case 400: {
         setErrMsg("Missing ID or Password");
@@ -35,7 +37,7 @@ function Login() {
         return;
       }
       case 500: {
-        setErrMsg("No Server Response");
+        setErrMsg("Login Failed");
         return;
       }
       default: {
@@ -67,17 +69,18 @@ function Login() {
           STORAGE_USER_CHECK,
           JSON.stringify({ uno: resData.uno, uid: resData.uid })
         );
+        setUserKey(sessionStorage.getItem(STORAGE_USER_CHECK));
 
         console.log("Login Success");
         setId("");
         setPwd("");
-        setSuccess(true);
       } else {
         serverRes(resData.status);
       }
     } catch (err) {
       if (!err?.response) {
         serverRes(err.response?.status);
+        console.log(err.response?.status);
       }
       errRef.current.focus();
     }
@@ -85,22 +88,12 @@ function Login() {
 
   return (
     <>
-      {success ? (
-        <Calendar></Calendar>
-      ) : (
+      {!userKey && (
         <section className="section-default section-login">
           <div className="login-area">
             <h1 className="login-title">Calendar</h1>
 
             <div className="login-form-area">
-              <p
-                ref={errRef}
-                className={errMsg ? "errmsg" : "offscreen"}
-                aria-live="assertive"
-              >
-                {errMsg}
-              </p>
-
               <form className="login-form" onSubmit={handlesubmit}>
                 <div className="form-row-area">
                   <label className="login-label" htmlFor="uid">
@@ -130,6 +123,13 @@ function Login() {
                     required
                   />
                 </div>
+                <span
+                  ref={errRef}
+                  className={errMsg ? "errmsg" : "offscreen"}
+                  aria-live="assertive"
+                >
+                  {errMsg}
+                </span>
                 <button className="login-btn">Sign In</button>
               </form>
             </div>
