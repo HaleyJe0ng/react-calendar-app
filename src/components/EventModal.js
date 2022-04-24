@@ -21,9 +21,6 @@ function EventModal() {
     setShowEventModal(false);
   };
 
-  //왜 title이 그냥 넘어올까?
-  console.log(title, description);
-
   //각 이벤트 일정 넣기 코드
   function handleSubmit(e) {
     e.preventDefault();

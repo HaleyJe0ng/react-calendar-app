@@ -6,15 +6,19 @@ import GlobalContext from "./../context/GlobalContext";
 function Day({ day, rowIdx }) {
   const [dayEvents, setDayEvents] = useState([]);
 
-  const { setDaySelected, setShowEventModal, savedEvents, setSelectedEvent } =
-    useContext(GlobalContext);
+  const {
+    setDaySelected,
+    setShowEventModal,
+    filteredEvents,
+    setSelectedEvent,
+  } = useContext(GlobalContext);
 
   useEffect(() => {
-    const events = savedEvents.filter(
+    const events = filteredEvents.filter(
       (event) => dayjs(event.day).format("DD-MM-YY") === day.format("DD-MM-YY")
     ); //create new dayjs objects
     setDayEvents(events);
-  }, [savedEvents, day]);
+  }, [filteredEvents, day]);
 
   const getCurrentDayClass = () => {
     //Check current day
@@ -50,8 +54,6 @@ function Day({ day, rowIdx }) {
               className={`event bg-${event.label}`}
             >
               {event.title}
-
-              {/* 여기서 자꾸 title이 잘못 넘어감...! */}
             </div>
           );
         })}

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState, useMemo } from "react";
 import GlobalContext from "./GlobalContext";
 import dayjs from "dayjs";
 
@@ -27,11 +27,20 @@ export default function ContextWrapper(props) {
   const [showEventModal, setShowEventModal] = useState(false);
   const [daySelected, setDaySelected] = useState(dayjs());
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [labels, setLabels] = useState([]);
   const [savedEvents, dispatchCalEvent] = useReducer(
     SavedEventReducer,
     [],
     initEvents
   );
+  const filteredEvents = useMemo(() => {
+    return savedEvents.filter((evt) =>
+      labels
+        .filter((lbl) => lbl.checked)
+        .map((lbl) => lbl.label)
+        .includes(evt.label)
+    );
+  }, [savedEvents, labels]);
 
   const STORAGE_USER_CHECK = "user_key";
   const [userKey, setUserKey] = useState(
@@ -43,8 +52,30 @@ export default function ContextWrapper(props) {
   }, [savedEvents]);
 
   useEffect(() => {
+    setLabels((prevLabels) => {
+      return [...new Set(savedEvents.map((evt) => evt.label))].map((label) => {
+        const currentLabel = prevLabels.find((lbl) => lbl.label === label);
+        return {
+          label,
+          checked: currentLabel ? currentLabel.checked : true,
+        };
+      });
+    });
+  }, [savedEvents]);
+
+  useEffect(() => {
     setUserKey(sessionStorage.getItem(STORAGE_USER_CHECK));
   }, [userKey]);
+
+  function updateLabel(label) {
+    setLabels(labels.map((lbl) => (lbl.label === label.label ? label : lbl)));
+  }
+
+  useEffect(() => {
+    if (!showEventModal) {
+      setSelectedEvent(null);
+    }
+  }, [showEventModal]);
 
   return (
     <GlobalContext.Provider
@@ -59,6 +90,10 @@ export default function ContextWrapper(props) {
         savedEvents,
         selectedEvent,
         setSelectedEvent,
+        labels,
+        setLabels,
+        updateLabel,
+        filteredEvents,
         userKey,
         setUserKey,
         STORAGE_USER_CHECK,
