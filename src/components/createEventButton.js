@@ -1,12 +1,13 @@
 import React, { useContext } from "react";
+import dayjs from "dayjs";
 import GlobalContext from "./../context/GlobalContext";
 
 function CreateEventButton() {
-  const { setShowEventModal, setSelectedEvent } = useContext(GlobalContext);
+  const { setShowEventModal, setDaySelected } = useContext(GlobalContext);
 
   const handleOnClickCreateEvent = () => {
     setShowEventModal(true);
-    setSelectedEvent(null);
+    setDaySelected(dayjs());
   };
 
   return (

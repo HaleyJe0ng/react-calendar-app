@@ -29,19 +29,17 @@ function Day({ day, rowIdx }) {
 
   return (
     <div className="day">
-      <header
-        className="dayheader"
+      <header className="dayheader">
+        {rowIdx === 0 && <p>{day.format("ddd").toUpperCase()}</p>}
+        <p className={`${getCurrentDayClass()}`}>{day.format("DD")}</p>
+      </header>
+      <div
+        className="daySelected"
         onClick={() => {
           setDaySelected(day);
-          setSelectedEvent(null);
           setShowEventModal(true);
         }}
       >
-        {rowIdx === 0 && <p>{day.format("ddd").toUpperCase()}</p>}
-
-        <p className={`${getCurrentDayClass()}`}>{day.format("DD")}</p>
-      </header>
-      <div className="daySelected">
         {dayEvents.map((event, idx) => {
           return (
             <div
