@@ -16,7 +16,12 @@ function Calendar() {
 
   return (
     <section className="section-default">
-      {showEventModal && <EventModal />}
+      {showEventModal && (
+        <>
+          <EventModal />
+          <div className="section-blind"></div>
+        </>
+      )}
       <CalendarHeader />
       <div className="calendar-main-area">
         <Sidebar />

@@ -1,7 +1,16 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import GlobalContext from "./../context/GlobalContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faClose,
+  faTrashCan,
+  faCalendar,
+  faPencil,
+  faTag,
+  faCheck,
+} from "@fortawesome/free-solid-svg-icons";
 
-const labelsClasses = ["indigo", "gray", "green", "blue", "red", "purple"];
+const labelsClasses = ["indigo", "red", "mint"];
 
 function EventModal() {
   const { setShowEventModal, daySelected, dispatchCalEvent, selectedEvent } =
@@ -24,83 +33,104 @@ function EventModal() {
   //각 이벤트 일정 넣기 코드
   function handleSubmit(e) {
     e.preventDefault();
-    const calendarEvent = {
-      title,
-      description,
-      label: selectedLabel,
-      day: daySelected.valueOf(),
-      id: selectedEvent ? selectedEvent.id : Date.now(),
-    };
-    if (selectedEvent) {
-      dispatchCalEvent({ type: "update", payload: calendarEvent });
+
+    if (title.replace(/^\s+|\s+$/gm, "") !== "") {
+      const calendarEvent = {
+        title,
+        description,
+        label: selectedLabel,
+        day: daySelected.valueOf(),
+        id: selectedEvent ? selectedEvent.id : Date.now(),
+      };
+      if (selectedEvent) {
+        dispatchCalEvent({ type: "update", payload: calendarEvent });
+      } else {
+        dispatchCalEvent({ type: "push", payload: calendarEvent });
+      }
+      setShowEventModal(false);
     } else {
-      dispatchCalEvent({ type: "push", payload: calendarEvent });
+      alert("Please input the title!");
     }
-    setShowEventModal(false);
   }
 
   return (
     <div className="event-modal-area">
       <form>
-        <header>
-          <span>drag_handle= </span>
-          {selectedEvent && (
-            <span
+        <header className="modal-header-area">
+          {selectedEvent ? (
+            <button
               onClick={() => {
                 dispatchCalEvent({ type: "delete", payload: selectedEvent });
                 setShowEventModal(false);
               }}
             >
-              [ DELETE ]
-            </span>
+              <FontAwesomeIcon icon={faTrashCan} className="ico-trash" />
+            </button>
+          ) : (
+            <div></div>
           )}
-          <button onClick={handleOnClose}>[ CLOSE ]</button>
+          <button onClick={handleOnClose}>
+            <FontAwesomeIcon icon={faClose} className="ico-close" />
+          </button>
         </header>
 
-        <div>
-          <div>
-            <div></div>
-            <input
-              type="text"
-              name="title"
-              placeholder="Add Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-            <span>[Schedule]</span>
-            <p>{daySelected.format("dddd, MMMM, DD")}</p>
-            <span>[description]</span>
+        <div className="modal-body-area">
+          <input
+            type="text"
+            name="title"
+            placeholder="Add Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="title-input"
+            required
+          />
+          <div className="modal-col-area">
+            <span>
+              <FontAwesomeIcon icon={faCalendar} className="ico-calendar" />
+            </span>
+            <p>{daySelected.format("YYYY MMMM DD - ddd")}</p>
+          </div>
+          <div className="modal-col-area">
+            <span className="sub-title">
+              <FontAwesomeIcon icon={faPencil} className="ico-calendar" />
+            </span>
             <input
               type="text"
               name="description"
               placeholder="Add Description"
               value={description}
+              className="description-input"
               onChange={(e) => setDescription(e.target.value)}
             />
-
-            <span>[Shared]</span>
-            <div>
+          </div>
+          <div className="modal-col-area labels-area">
+            <span className="sub-title">
+              <FontAwesomeIcon icon={faTag} className="ico-calendar" />
+            </span>
+            <div className="labels-list">
               {labelsClasses.map((lblClass, i) => {
                 return (
                   <span
                     key={i}
                     onClick={() => setSelectedLabel(lblClass)}
-                    className={`bg-${lblClass}`}
+                    className={`text-${lblClass}`}
                   >
-                    {/* {selectedLabel === lblClass && <p>{lblClass} icon</p>} */}
-
-                    <p>{lblClass} icon</p>
-                    {/* 선택되었을 때 수정 */}
+                    {selectedLabel === lblClass && (
+                      <FontAwesomeIcon icon={faCheck} className="ico-close" />
+                    )}
                   </span>
                 );
               })}
             </div>
           </div>
         </div>
-        <footer>
-          <button onClick={handleSubmit} type="submit">
-            Save
+        <footer className="modal-footer-area">
+          <button
+            className="modal-save-btn"
+            onClick={handleSubmit}
+            type="submit"
+          >
+            SAVE
           </button>
         </footer>
       </form>

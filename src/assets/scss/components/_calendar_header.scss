@@ -1,5 +1,51 @@
 .calendar-header-area{
+    @include flex(row, space-between, center);
+    position:relative;
     width: 100%;
     height: $header-height;
-    @include flex(row, space-between, center);
+    padding: 0 4rem;
+    box-shadow: 0 0 3px rgba($color-mint-01, 0.4);
+    color: $color-gray-01;
+    z-index:999;
+
+    .calendar-header-info{
+        @include flex(row, center, center);
+        .ico-calendar{
+            width: 3rem;
+            height: 3rem;
+            margin-top: -0.3rem;
+            padding-right: 2rem;
+        }
+        .calendar-header-year, .calendar-header-date{
+            font-size: $font-medium;
+            font-weight: $weight-bold;
+            text-align: center;
+        }
+        .calendar-header-year{
+            padding-right: 5rem;
+        }
+
+        .calendar-header-date{
+            width: 13.5rem;
+            padding: 0 1rem;
+        }
+    }
+
+    .calendar-header-user-area{
+        @include flex(row, center, center);
+
+        .user-info{
+            @include flex(column, center, center);
+            padding-right: 2rem;
+
+            .ico-user{
+                width: 3rem;
+                height: 3rem;
+                margin-bottom: 0.3rem;
+            }
+            .user-id{
+                font-size: $font-nano;
+            }
+        }
+    }
 }

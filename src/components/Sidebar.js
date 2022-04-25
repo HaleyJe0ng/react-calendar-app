@@ -4,10 +4,11 @@ import Labels from "./Labels";
 
 function Sidebar() {
   return (
-    <div>
-      Sidebar
+    <div className="sidebar-area">
       <CreateEventButton />
-      <Labels />
+      <div className="labels-area">
+        <Labels />
+      </div>
     </div>
   );
 }

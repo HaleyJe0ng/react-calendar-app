@@ -1,14 +1,86 @@
 .event-modal-area{
-    display:flex;
     position: fixed;
-    top:0;
-    left:0;
-    width: 30rem;
-    height: 40rem;
+    top: 50%;
+    left: 50%;
+    right: 0;
+    bottom: 0;
+    transform: translate(-50%, -50%);
+    width: 35rem;
+    height: 50rem;
     background-color: $color-white;
-    opacity: 1;
-    transition: opacity 0.5s ease-in-out;
-    padding: 4rem 4rem;
-    z-index: 9999;
-}
 
+    z-index: 9999;
+
+    .modal-header-area{
+        @include flex(row, space-between, center);
+        width: 100%;
+        height: 6rem;
+        padding: 0.2rem 1.4rem 0 1.4rem;
+        background-color: $color-mint-01;
+        color: $color-white;
+
+        & .ico-trash{
+           width: 3rem;
+           height: 3rem;
+           color: $color-green-01;
+        }
+        & .ico-close{
+            margin-left: 2px;
+            width: 3.5rem;
+            height: 3.5rem;
+            color: $color-white;
+        }
+    }
+
+    .modal-body-area{
+        @include flex(column, flex-start, flex-start);
+        padding: 1.4rem 2rem;
+
+        .title-input{
+            width: 100%;
+            border-bottom: 3px solid $color-green-01;
+            margin-bottom: 2rem;
+        }
+
+        .modal-col-area{
+            @include flex(column, flex-start, flex-start);
+            padding-bottom: 1rem;
+            width: 100%;
+
+            .sub-title{
+                padding: 0.4rem 0;
+                font-size: $font-regular-sm;
+                font-weight: $weight-semi-bold;
+                color: $color-gray-01;
+            }
+            &:last-child{
+              padding-bottom: 0;
+            }
+
+            .description-input{
+                width: 100%;
+                border-bottom: 3px solid $color-green-01;
+           
+            }
+        }
+    }
+
+    .modal-footer-area{
+        @include flex();
+        position:absolute;
+        width: 100%;
+        height: 5rem;
+        bottom:0;
+        left:0;
+        background-color: rgba($color-gray-01, 0.1);
+
+        .modal-save-btn{
+            width: 100%;
+            height: 100%;
+            font-weight: $weight-bold;
+            font-size: $font-regular;
+            opacity: 0.4;
+            background: none;
+        }
+    }
+}

@@ -1,42 +1,13 @@
 .calendar-main-area{
+    @include flex(row, space-between, flex-start);
     width: 100%;
-    @include flex(row, center, flex-start);
+    height: calc(100vh - #{$header-height});
+    flex-wrap: wrap;
 
     .calendar-area{
         width: 80%;
-
-        .month-area{
-            @include flex(column, center, center);
-
-            .week-area{
-                @include flex(row, center, center);
-            }
-        }
-        .day{
-            position: relative;
-
-            .dayheader{
-                background-color: #555;
-                padding:1rem 3rem;
-            }
-            .today-dot{
-                background-color: $color-pink-01;
-                color: white;
-                padding:0.8rem;
-                border-radius: 50%;
-            }
-
-            .daySelected{
-                padding: 5rem 3rem;
-                background-color: $color-pink-01;
-                z-index:2;
-
-                .event{
-                    background-color: $color-mint-01;
-                    padding: 1rem 2rem;
-                    z-index:4;
-                }
-            }
-        }
+        height: calc(100vh - #{$header-height});
+        box-shadow: 0 3px 3px rgba($color-mint-01, 0.4);
+        
     }
 }

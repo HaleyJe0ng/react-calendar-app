@@ -1,0 +1,17 @@
+.event{
+    @include flex(row, flex-start, center);
+    @include ellipse;
+    background-color: rgba($color-mint-01, 0.9);
+    width: 90%;
+    height: 3rem;
+    margin: 0.1rem 0;
+    padding-left: 0.4rem;
+    border-radius: 0.3rem;
+    color: $color-white;
+    z-index:4;   
+
+    @each $name, $color in $label-colors {
+        &.bg-#{$name} { background-color: #{$color} !important; }
+      } 
+
+}

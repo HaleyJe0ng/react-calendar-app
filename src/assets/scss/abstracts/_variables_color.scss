@@ -1,5 +1,14 @@
 $color-black: #000000;
 $color-white: #ffffff;
-$color-gray-01: #6d6d6d;
+$color-gray-01: #454545;
 $color-mint-01: #65bfa0;
+$color-green-01: #175b43;
 $color-pink-01: #ee809c;
+$color-indigo-01: #454da1;
+$color-red-01:#ad444b;
+
+$label-colors: (
+        "indigo": $color-indigo-01,
+        "red": $color-red-01,
+        "mint": $color-mint-01,
+);

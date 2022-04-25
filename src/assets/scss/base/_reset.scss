@@ -79,6 +79,10 @@ input:disabled {
   cursor: not-allowed;
 }
 
+input:focus, input:active {
+  outline: none;
+}
+
 select {
   border: 0;
   background-color: transparent;

@@ -1,0 +1,83 @@
+.month-area{
+    @include flex(column, center , center);
+    width: 100%;
+    height: 100%;
+    color: $color-gray-01;
+
+    .week-area{
+        @include flex(row, flex-end, flex-start);
+        width: 100%;
+        height: 100%;
+
+        &:first-child{
+            height: calc(100% + #{$day-header-height * 5});
+            .day-area{
+                .day-body{
+                    height: calc(100% - #{$day-header-height * 2});
+                }
+            }
+        }
+
+        .day-area{
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border: 1px solid rgba($color-mint-01, 0.2);
+           
+
+            .day-header{
+              
+                text-align: right;
+        
+                .day-header-date{
+                    background-color: $color-mint-01;
+                    height: $day-header-height;
+                    padding: 1.2rem 0;
+                    font-weight: $weight-semi-bold;
+                    border-bottom: 2px solid $color-mint-01;
+                    text-align: center;
+                    font-weight: $weight-semi-bold;
+                    
+                    &.date-weekday{
+                        color: $color-green-01;
+                    }
+
+                    &.date-holiday{
+                        color: $color-white;
+                    }
+                }
+
+                .day-header-day{
+                    position:relative;
+                    height: $day-header-height;
+                    padding: 1rem 1rem 1rem 0;
+                    font-weight: $weight-semi-bold;
+                    z-index:7;
+
+                    &.today{
+                        color: $color-white;
+                    }
+                    .today-dot{
+                        position: absolute;
+                        background-color: rgba($color-green-01, 0.7);
+                        width: 3rem;
+                        height: 3rem;
+                        border-radius: 50%;
+                        top: 0.4rem;
+                        right: 0.3rem;
+                        z-index: -1;
+                    }
+                }
+            }
+            
+            .day-body{
+                @include flex(column, flex-start, center);
+                position:relative;
+                width: 100%;
+                height: calc(100% - #{$day-header-height});
+                z-index:2;
+            }
+        }
+
+    }
+}
