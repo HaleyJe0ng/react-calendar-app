@@ -1,4 +1,10 @@
-import React, { useEffect, useReducer, useState, useMemo } from "react";
+import React, {
+  useEffect,
+  useReducer,
+  useState,
+  useMemo,
+  useSyncExternalStore,
+} from "react";
 import GlobalContext from "./GlobalContext";
 import dayjs from "dayjs";
 
@@ -28,6 +34,7 @@ export default function ContextWrapper(props) {
   const [daySelected, setDaySelected] = useState(dayjs());
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [labels, setLabels] = useState([]);
+  const [userMonthEvents, setUserMonthEvents] = useState([]);
   const [savedEvents, dispatchCalEvent] = useReducer(
     SavedEventReducer,
     [],
@@ -94,6 +101,8 @@ export default function ContextWrapper(props) {
         setLabels,
         updateLabel,
         filteredEvents,
+        userMonthEvents,
+        setUserMonthEvents,
         userKey,
         setUserKey,
         STORAGE_USER_CHECK,

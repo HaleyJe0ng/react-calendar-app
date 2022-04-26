@@ -1,15 +1,9 @@
 <?php
 include "db_conn.php";
+include "validate.php";
 header("Content-Type: application/json");
 
 if (isset($_POST['uid']) && isset($_POST['upasswd'])) {
-
-    function validate($data){
-       $data = trim($data);
-       $data = stripslashes($data);
-       $data = htmlspecialchars($data);
-       return $data;
-    }
 
     $uid = validate($_POST['uid']);
     $upasswd = validate($_POST['upasswd']);

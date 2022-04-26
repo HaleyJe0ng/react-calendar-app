@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import GlobalContext from "./../context/GlobalContext";
-const URL = "http://15.164.213.157/database/login.php";
+const URL = "http://15.164.213.157/login.php";
 
 function Login() {
   const { userKey, setUserKey, STORAGE_USER_CHECK } = useContext(GlobalContext);

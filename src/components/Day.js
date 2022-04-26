@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 import dayjs from "dayjs";
-import EventModal from "./EventModal";
 import GlobalContext from "./../context/GlobalContext";
 
 function Day({ day, rowIdx }) {
