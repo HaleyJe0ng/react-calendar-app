@@ -10,20 +10,14 @@ const GlobalContext = React.createContext({
   showEventModal: false,
   setShowEventModal: () => {},
 
-  dispatchCalEvent: ({ type, payload }) => {},
-  savedEvents: [],
-
   selectedEvent: null,
   setSelectedEvent: () => {},
 
-  labels: [],
-  setLabels: () => {},
-  updateLabel: () => {},
-
-  filteredEvents: [],
-
   userMonthEvents: [],
   setUserMonthEvents: () => {},
+
+  labels: [],
+  setLabels: () => {},
 
   STORAGE_USER_CHECK: "user_key",
   userKey: null,

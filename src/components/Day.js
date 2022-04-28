@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import dayjs from "dayjs";
 import GlobalContext from "./../context/GlobalContext";
 
-function Day({ day, rowIdx }) {
+function Day({ day, rowIdx, userEvt }) {
   const [dayEvents, setDayEvents] = useState([]);
   const [holiday, setHoliday] = useState("weekday");
 
@@ -11,14 +11,8 @@ function Day({ day, rowIdx }) {
     setShowEventModal,
     filteredEvents,
     setSelectedEvent,
+    labels,
   } = useContext(GlobalContext);
-
-  useEffect(() => {
-    const events = filteredEvents.filter(
-      (event) => dayjs(event.day).format("DD-MM-YY") === day.format("DD-MM-YY")
-    ); //create new dayjs objects
-    setDayEvents(events);
-  }, [filteredEvents, day]);
 
   useEffect(() => {
     if (
@@ -30,12 +24,10 @@ function Day({ day, rowIdx }) {
   });
 
   const getCurrentDayClass = () => {
-    //Check current day
     return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY") ? "today" : "";
   };
 
   const getCurrentDayDotClass = () => {
-    //Check current day
     return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")
       ? "today-dot"
       : "";
@@ -61,7 +53,7 @@ function Day({ day, rowIdx }) {
           setShowEventModal(true);
         }}
       >
-        {dayEvents.map((event, idx) => {
+        {userEvt.map((event, idx) => {
           return (
             <div
               key={idx}
@@ -70,9 +62,9 @@ function Day({ day, rowIdx }) {
                 setDaySelected(day);
                 setShowEventModal(true);
               }}
-              className={`event bg-${event.label}`}
+              className={`event bg-${labels[event.owner - 1]}`}
             >
-              {event.title}
+              {event.stitle}
             </div>
           );
         })}

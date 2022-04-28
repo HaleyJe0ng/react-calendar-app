@@ -1,16 +1,10 @@
 import axios from "axios";
-import dayjs from "dayjs";
 const URL = "http://15.164.213.157/";
 
-export async function getUserEvent(method, user_key, month) {
-  let url = "";
-  const year = dayjs(new Date(dayjs().year(), month)).format("YYYY");
-  const mth = dayjs(new Date(dayjs().year(), month)).format("MM");
+export async function getSharedUser(user_key) {
+  let url = "get-shared-user.php";
   let formdata = new FormData();
   formdata.append("uno", user_key);
-  formdata.append("year", year);
-  formdata.append("month", mth);
-  console.log(mth);
 
   const serverRes = (res) => {
     switch (res) {
@@ -33,36 +27,17 @@ export async function getUserEvent(method, user_key, month) {
     }
   };
 
-  switch (method) {
-    case "POST": {
-      url = "get-schedule.php";
-      break;
-    }
-    case "UPDATE": {
-      url = "update-schedule.php";
-      break;
-    }
-    case "DELETE": {
-      url = "delete-schedule.php";
-      break;
-    }
-    default: {
-      serverRes(500);
-      break;
-    }
-  }
-
   try {
     axios.default.withCredentials = true;
 
     const response = await axios({
-      method: method,
+      method: "POST",
       url: `${URL}${url}`,
       data: formdata,
     });
 
     const resData = response?.data;
-    console.log(resData);
+
     return resData.results ? resData.results : [];
   } catch (err) {
     if (!err?.response) {

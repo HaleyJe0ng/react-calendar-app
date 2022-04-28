@@ -10,43 +10,44 @@ import {
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
-const labelsClasses = ["indigo", "red", "mint"];
-
-function EventModal() {
-  const { setShowEventModal, daySelected, dispatchCalEvent, selectedEvent } =
+function EventModal({ sharedUser }) {
+  const { setShowEventModal, daySelected, selectedEvent, userKey, labels } =
     useContext(GlobalContext);
 
-  const [title, setTitle] = useState(selectedEvent ? selectedEvent.title : "");
-  const [description, setDescription] = useState(
-    selectedEvent ? selectedEvent.description : ""
+  const [day, setDay] = useState(
+    selectedEvent ? selectedEvent.sstartdate : daySelected.format("YYYY-MM-DD")
   );
-  const [selectedLabel, setSelectedLabel] = useState(
-    selectedEvent
-      ? labelsClasses.find((lbl) => lbl === selectedEvent.label)
-      : labelsClasses[0]
-  );
+  const [title, setTitle] = useState(selectedEvent ? selectedEvent.stitle : "");
+  const [info, setInfo] = useState(selectedEvent ? selectedEvent.sinfo : "");
+  const [owner, setOwner] = useState(JSON.parse(userKey).uno);
+  const [shared, setShared] = useState();
+  const [id, setId] = useState(selectedEvent ? selectedEvent.sno : 0);
 
   const handleOnClose = () => {
     setShowEventModal(false);
   };
 
-  //각 이벤트 일정 넣기 코드
   function handleSubmit(e) {
     e.preventDefault();
 
     if (title.replace(/^\s+|\s+$/gm, "") !== "") {
       const calendarEvent = {
-        title,
-        description,
-        label: selectedLabel,
-        day: daySelected.valueOf(),
-        id: selectedEvent ? selectedEvent.id : Date.now(),
+        sno: id,
+        owner,
+        shared,
+        stitle: title,
+        sinfo: info,
+        day: day,
       };
+
       if (selectedEvent) {
-        dispatchCalEvent({ type: "update", payload: calendarEvent });
+        //id 같이 넣어줌
+        //update
       } else {
-        dispatchCalEvent({ type: "push", payload: calendarEvent });
+        //id 넣지 않음
+        //push
       }
+
       setShowEventModal(false);
     } else {
       alert("Please input the title!");
@@ -60,7 +61,7 @@ function EventModal() {
           {selectedEvent ? (
             <button
               onClick={() => {
-                dispatchCalEvent({ type: "delete", payload: selectedEvent });
+                //delete
                 setShowEventModal(false);
               }}
             >
@@ -77,7 +78,7 @@ function EventModal() {
         <div className="modal-body-area">
           <input
             type="text"
-            name="title"
+            name="stitle"
             placeholder="Add Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -86,44 +87,71 @@ function EventModal() {
           />
           <div className="modal-col-area">
             <span>
-              <FontAwesomeIcon icon={faCalendar} className="ico-calendar" />
+              <FontAwesomeIcon icon={faCalendar} className="ico-calendar" />{" "}
+              Schedule
             </span>
-            <p>{daySelected.format("YYYY MMMM DD - ddd")}</p>
+            <input
+              type="date"
+              id="sstartdate"
+              name="trip-start"
+              value={day}
+              onChange={(e) => {
+                e.preventDefault();
+                setDay(e.target.value);
+              }}
+            />
           </div>
           <div className="modal-col-area">
             <span className="sub-title">
-              <FontAwesomeIcon icon={faPencil} className="ico-calendar" />
+              <FontAwesomeIcon icon={faPencil} className="ico-calendar" />{" "}
+              Description
             </span>
             <input
               type="text"
-              name="description"
+              name="sinfo"
               placeholder="Add Description"
-              value={description}
+              value={info}
               className="description-input"
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => setInfo(e.target.value)}
             />
           </div>
           <div className="modal-col-area labels-area">
             <span className="sub-title">
-              <FontAwesomeIcon icon={faTag} className="ico-calendar" />
+              <FontAwesomeIcon icon={faTag} className="ico-calendar" /> Share
             </span>
+
             <div className="labels-list">
-              {labelsClasses.map((lblClass, i) => {
+              {sharedUser.map((share, i) => {
+                // return (
+                //   <span
+                //     key={i}
+                //     onClick={() => setShared(share.shared)}
+                //     className={`text-${labels[share.shared - 1]}`}
+                //   >   {share.shared}
+                //     <FontAwesomeIcon icon={faCheck} className="ico-close" />
+                //   </span>
+                // );
+
                 return (
-                  <span
-                    key={i}
-                    onClick={() => setSelectedLabel(lblClass)}
-                    className={`text-${lblClass}`}
-                  >
-                    {selectedLabel === lblClass && (
-                      <FontAwesomeIcon icon={faCheck} className="ico-close" />
-                    )}
-                  </span>
+                  <>
+                    <label key={`${i}-lbl`} htmlFor={`shared-${share.shared}`}>
+                      {share.user}
+                    </label>
+                    <input
+                      key={`${i}-ipt`}
+                      id={`shared-${share.shared}`}
+                      type="checkbox"
+                      value={share.shared}
+                      className={`text-${labels[share.shared - 1]}`}
+                    />
+                    {/* setShared 중복으로 들어가야 함! */}
+                  </>
                 );
               })}
             </div>
           </div>
         </div>
+
         <footer className="modal-footer-area">
           <button
             className="modal-save-btn"
