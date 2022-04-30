@@ -35,7 +35,8 @@ function Month({ month }) {
     getUserEvent(
       "POST",
       JSON.parse(sessionStorage.getItem(STORAGE_USER_CHECK)).uno,
-      monthIndex
+      monthIndex,
+      []
     ).then((res) => {
       setUserEvent(res);
     });

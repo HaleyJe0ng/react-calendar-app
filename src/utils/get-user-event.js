@@ -2,7 +2,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 const URL = "http://15.164.213.157/";
 
-export async function getUserEvent(method, user_key, month) {
+export async function getUserEvent(method, user_key, month, userEvt = null) {
   let url = "";
   const year = dayjs(new Date(dayjs().year(), month)).format("YYYY");
   const mth = dayjs(new Date(dayjs().year(), month)).format("MM");
@@ -10,6 +10,10 @@ export async function getUserEvent(method, user_key, month) {
   formdata.append("uno", user_key);
   formdata.append("year", year);
   formdata.append("month", mth);
+
+  if (method === "UPDATE") {
+    //shared 정보 있을 경우 추가 업데이트!
+  }
   console.log(mth);
 
   const serverRes = (res) => {

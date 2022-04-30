@@ -10,15 +10,22 @@ import { getSharedUser } from "../utils/get-shared-user";
 function Calendar() {
   const [sharedUserInfo, setSharedUserInfo] = useState([]);
   const [currentMonth, setCurrentMonth] = useState(getMonth());
-  const { monthIndex, showEventModal, userKey, sharedUser, setSharedUser } =
-    useContext(GlobalContext);
+  const {
+    monthIndex,
+    showEventModal,
+    userKey,
+    sharedUser,
+    setSharedUser,
+    filteredEvents,
+    setFilteredEvents,
+  } = useContext(GlobalContext);
 
   useEffect(() => {
     getSharedUser(JSON.parse(userKey).uno).then((res) => {
       setSharedUserInfo(res);
       console.log("res", res);
     });
-  }, []);
+  }, [userKey]);
 
   console.log("sharedUser IN CALENDAR", sharedUser);
 
@@ -34,7 +41,7 @@ function Calendar() {
     <section className="section-default">
       {showEventModal && (
         <>
-          <EventModal sharedUser={sharedUserInfo} />
+          <EventModal />
           <div className="section-blind"></div>
         </>
       )}

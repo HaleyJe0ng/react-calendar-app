@@ -32,8 +32,6 @@ function Day({ day, rowIdx, userEvt }) {
       : "";
   };
 
-  console.log("filteredEvents  - Days", filteredEvents);
-
   return (
     <div className="day-area">
       <header className="day-header">
@@ -62,21 +60,23 @@ function Day({ day, rowIdx, userEvt }) {
                 return value.user === event.uid;
               });
 
-              if (filterState[0].state === true) {
-                return (
-                  <div
-                    key={idx}
-                    onClick={() => {
-                      setSelectedEvent(event);
-                      setDaySelected(day);
-                      setShowEventModal(true);
-                    }}
-                    className={`event bg-${labels[event.owner - 1]}`}
-                  >
-                    {event.stitle}
-                  </div>
-                );
-              }
+              return filterState.map((val) => {
+                if (val.state === true) {
+                  return (
+                    <div
+                      key={idx}
+                      onClick={() => {
+                        setSelectedEvent(event);
+                        setDaySelected(day);
+                        setShowEventModal(true);
+                      }}
+                      className={`event bg-${labels[event.owner - 1]}`}
+                    >
+                      {event.stitle}
+                    </div>
+                  );
+                }
+              });
             })}
       </div>
     </div>
