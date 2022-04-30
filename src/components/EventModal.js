@@ -267,6 +267,7 @@ function EventModal() {
             className="modal-save-btn"
             onClick={handleSubmit}
             type="submit"
+            disabled={owner === JSON.parse(userKey).uno ? false : true}
           >
             SAVE
           </button>
