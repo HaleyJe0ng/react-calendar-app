@@ -7,21 +7,43 @@ import {
   faCalendar,
   faPencil,
   faTag,
-  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
-function EventModal({ sharedUser }) {
-  const { setShowEventModal, daySelected, selectedEvent, userKey, labels } =
-    useContext(GlobalContext);
+function EventModal() {
+  const {
+    setShowEventModal,
+    daySelected,
+    selectedEvent,
+    userKey,
+    labels,
+    sharedUser,
+  } = useContext(GlobalContext);
 
   const [day, setDay] = useState(
     selectedEvent ? selectedEvent.sstartdate : daySelected.format("YYYY-MM-DD")
   );
   const [title, setTitle] = useState(selectedEvent ? selectedEvent.stitle : "");
   const [info, setInfo] = useState(selectedEvent ? selectedEvent.sinfo : "");
-  const [owner, setOwner] = useState(JSON.parse(userKey).uno);
-  const [shared, setShared] = useState();
-  const [id, setId] = useState(selectedEvent ? selectedEvent.sno : 0);
+  const [owner, setOwner] = useState(
+    selectedEvent ? selectedEvent.owner : JSON.parse(userKey).uno
+  );
+  const [share, setShare] = useState([]);
+  const [eventKey, setEventKey] = useState(
+    selectedEvent ? selectedEvent.sno : 0
+  );
+  const [id, setId] = useState(selectedEvent ? selectedEvent.uid : "");
+
+  const [checkedState, setCheckedState] = useState(
+    sharedUser !== []
+      ? sharedUser.map((usr) => {
+          if (selectedEvent)
+            return usr.shared === selectedEvent.owner
+              ? { ...usr, state: true }
+              : { ...usr, state: false };
+          else return { ...usr, state: false };
+        })
+      : []
+  );
 
   const handleOnClose = () => {
     setShowEventModal(false);
@@ -32,9 +54,10 @@ function EventModal({ sharedUser }) {
 
     if (title.replace(/^\s+|\s+$/gm, "") !== "") {
       const calendarEvent = {
-        sno: id,
+        sno: eventKey,
         owner,
-        shared,
+        uid: id,
+        share,
         stitle: title,
         sinfo: info,
         day: day,
@@ -120,34 +143,47 @@ function EventModal({ sharedUser }) {
               <FontAwesomeIcon icon={faTag} className="ico-calendar" /> Share
             </span>
 
-            <div className="labels-list">
-              {sharedUser.map((share, i) => {
-                // return (
-                //   <span
-                //     key={i}
-                //     onClick={() => setShared(share.shared)}
-                //     className={`text-${labels[share.shared - 1]}`}
-                //   >   {share.shared}
-                //     <FontAwesomeIcon icon={faCheck} className="ico-close" />
-                //   </span>
-                // );
-
-                return (
-                  <>
-                    <label key={`${i}-lbl`} htmlFor={`shared-${share.shared}`}>
-                      {share.user}
-                    </label>
-                    <input
-                      key={`${i}-ipt`}
-                      id={`shared-${share.shared}`}
-                      type="checkbox"
-                      value={share.shared}
-                      className={`text-${labels[share.shared - 1]}`}
-                    />
-                    {/* setShared 중복으로 들어가야 함! */}
-                  </>
-                );
-              })}
+            <div className="shared-list">
+              <ul className="shared-items">
+                {sharedUser !== [] &&
+                  sharedUser.map((sharedInfo, i) => {
+                    return (
+                      <li key={`${i}-div`}>
+                        <label
+                          key={`${i}-lbl`}
+                          htmlFor={`shared-${sharedInfo.shared}`}
+                          className="shared-item"
+                        >
+                          {sharedInfo.user}
+                          <div
+                            className={`text-${labels[sharedInfo.shared - 1]}`}
+                          >
+                            <input
+                              key={`${i}-ipt`}
+                              id={`shared-${sharedInfo.shared}`}
+                              type="checkbox"
+                              value={sharedInfo.shared}
+                              checked={checkedState[i].state}
+                              onChange={() => {
+                                setCheckedState({
+                                  ...checkedState,
+                                  [i]: {
+                                    state: !checkedState[i].state,
+                                    user: checkedState[i].user,
+                                    shared: checkedState[i].shared,
+                                  },
+                                });
+                              }}
+                            />
+                            {checkedState[i].state && (
+                              <span className="check-mark"></span>
+                            )}
+                          </div>
+                        </label>
+                      </li>
+                    );
+                  })}
+              </ul>
             </div>
           </div>
         </div>

@@ -26,7 +26,7 @@ if (isset($_POST['uno'])) {
          if(mysqli_num_rows($result) != 0){
               while($row = mysqli_fetch_assoc($result)){
                    $results[] = [                       
-                        'shared' => $row['llinked'],
+                        'shared' => $row['uno'],
                         'user' => $row['uid']
                     ];
                 }

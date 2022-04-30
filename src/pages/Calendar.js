@@ -8,20 +8,23 @@ import EventModal from "../components/EventModal";
 import { getSharedUser } from "../utils/get-shared-user";
 
 function Calendar() {
-  const [sharedUser, setSharedUser] = useState([]);
   const [sharedUserInfo, setSharedUserInfo] = useState([]);
   const [currentMonth, setCurrentMonth] = useState(getMonth());
-  const { monthIndex, showEventModal, userKey } = useContext(GlobalContext);
+  const { monthIndex, showEventModal, userKey, sharedUser, setSharedUser } =
+    useContext(GlobalContext);
 
   useEffect(() => {
     getSharedUser(JSON.parse(userKey).uno).then((res) => {
-      setSharedUser(res);
+      setSharedUserInfo(res);
+      console.log("res", res);
     });
   }, []);
 
+  console.log("sharedUser IN CALENDAR", sharedUser);
+
   useEffect(() => {
-    setSharedUserInfo(sharedUser);
-  }, [sharedUser]);
+    setSharedUser(sharedUserInfo);
+  }, [sharedUserInfo]);
 
   useEffect(() => {
     setCurrentMonth(getMonth(monthIndex));
@@ -37,7 +40,7 @@ function Calendar() {
       )}
       <CalendarHeader />
       <div className="calendar-main-area">
-        <Sidebar sharedUser={sharedUserInfo} />
+        <Sidebar />
         <div className="calendar-area">
           <Month month={currentMonth} />
         </div>

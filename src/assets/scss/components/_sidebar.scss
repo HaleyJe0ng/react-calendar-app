@@ -62,3 +62,72 @@
     }
 }
 
+.sidebar-shared-area{
+    @include flex(column, flex-start,  flex-start);
+    width: 100%;
+    margin-left: 1.6rem;
+
+    .sub-title{
+        font-size: $font-regular;
+        margin-bottom: 2rem;
+    }
+
+    @at-root .shared-list{
+        @include flex(row, flex-start, center);
+        margin-bottom: 1rem;
+        position: relative;
+    
+        .shared-items{
+            @include flex(column, flex-start, center);
+    
+            & li:not(:last-child){
+                padding-bottom: 1rem;
+            }
+    
+            .shared-item{
+                @include flex(row, flex-start, center);
+              
+                @each $name, $color in $label-colors {
+                    .text-#{$name} { 
+                        position: relative;
+                        background-color: #{$color}!important;
+                        color: $color-white;
+                        width: 2.5rem; 
+                        height: 2.5rem;
+                        border-radius: 0.3rem;
+                        margin-left: 1rem;
+            
+                        .check-mark {
+                            display: block;
+                            position: absolute;
+                            top: 0;
+                            left: -0.2rem;
+                            height: 25px;
+                            width: 25px;
+                            z-index: 8;
+                        }
+                        .check-mark:after {
+                            content: "";
+                            position: absolute;
+                            display: block;
+                        }
+                        .check-mark:after {
+                            left: 11px;
+                            top: 4px;
+                            width: 0.7rem;
+                            height: 1.2rem;
+                            border: solid white;
+                            border-width: 0 3px 3px 0;
+                            -webkit-transform: rotate(45deg);
+                            -ms-transform: rotate(45deg);
+                            transform: rotate(45deg);
+                        }
+                    }
+                } 
+            }
+        }
+    }
+}
+
+
+

@@ -9,6 +9,8 @@ function Month({ month }) {
   const { monthIndex, STORAGE_USER_CHECK, setUserMonthEvents } =
     useContext(GlobalContext);
 
+  console.log("userEvent IN MONTH", userEvent);
+
   const getDayUserCheck = (day, idx, index) => {
     let prevData = new Array();
 

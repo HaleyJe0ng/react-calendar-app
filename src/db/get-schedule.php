@@ -14,12 +14,19 @@ if (isset($_POST['uno']) && isset($_POST['year']) && isset($_POST['month'])) {
         exit();
     }else{
 
-    $sql =  "((SELECT sno, suno as uno, sstartdate, stitle, sinfo FROM schedule, user 
-    WHERE suno = uno and uno = '$uno' AND YEAR(sstartdate)='$year' AND MONTH(sstartdate) BETWEEN '$month' AND '$month')    
-    UNION
-    (SELECT sno, suno as uno, sstartdate, stitle, sinfo FROM schedule 
-	WHERE YEAR(sstartdate)='$year' AND MONTH(sstartdate) BETWEEN '$month' AND '$month'
-	AND sno = (SELECT dsno FROM sharedschedule, user WHERE uno = duno AND uno = '$uno')))ORDER BY sstartdate ASC";
+    $sql = "((SELECT sno, suno as uno, uid, sstartdate, stitle, sinfo FROM schedule, user 
+            WHERE suno = uno and uno = '$uno' 
+            AND YEAR(sstartdate)='$year' AND MONTH(sstartdate) BETWEEN '$month' AND '$month') 
+            UNION 
+            (SELECT sno, suno as uno, uid, sstartdate, stitle, sinfo 
+                FROM schedule, user 
+                WHERE uno = (SELECT suno FROM schedule 
+                            WHERE YEAR(sstartdate)='$year' AND MONTH(sstartdate) BETWEEN '$month' AND '$month' 
+                            AND sno = (SELECT dsno FROM sharedschedule, user WHERE uno = duno AND uno = '$uno'))
+                AND sno = (SELECT sno FROM schedule 
+                            WHERE YEAR(sstartdate)='$year' AND MONTH(sstartdate) BETWEEN '$month' AND '$month' 
+                            AND sno = (SELECT dsno FROM sharedschedule, user WHERE uno = duno AND uno = '$uno')))
+            )ORDER BY sstartdate ASC;";
 
     $result = mysqli_query($conn, $sql);
 
@@ -35,11 +42,13 @@ if (isset($_POST['uno']) && isset($_POST['year']) && isset($_POST['month'])) {
                    $results[] = [                       
                         'sno' => $row['sno'],
                         'owner' => $row['uno'],
+                        'uid' => $row['uid'],
                         'sstartdate' =>  $row['sstartdate'],
                         'stitle' => $row['stitle'],
                         'sinfo' => $row['sinfo']
                     ];
                 }
+
                 echo json_encode(array('status'=>'success', 'results' => $results));
                 exit();
          }

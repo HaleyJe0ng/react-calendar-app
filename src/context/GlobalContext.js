@@ -16,8 +16,14 @@ const GlobalContext = React.createContext({
   userMonthEvents: [],
   setUserMonthEvents: () => {},
 
+  sharedUser: [],
+  setSharedUser: () => {},
+
   labels: [],
   setLabels: () => {},
+
+  filteredEvents: [],
+  setFilteredEvents: (filter) => {},
 
   STORAGE_USER_CHECK: "user_key",
   userKey: null,

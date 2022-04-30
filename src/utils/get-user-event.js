@@ -62,6 +62,7 @@ export async function getUserEvent(method, user_key, month) {
     });
 
     const resData = response?.data;
+
     console.log(resData);
     return resData.results ? resData.results : [];
   } catch (err) {

@@ -3,15 +3,14 @@ import dayjs from "dayjs";
 import GlobalContext from "./../context/GlobalContext";
 
 function Day({ day, rowIdx, userEvt }) {
-  const [dayEvents, setDayEvents] = useState([]);
   const [holiday, setHoliday] = useState("weekday");
 
   const {
     setDaySelected,
     setShowEventModal,
-    filteredEvents,
     setSelectedEvent,
     labels,
+    filteredEvents,
   } = useContext(GlobalContext);
 
   useEffect(() => {
@@ -33,6 +32,8 @@ function Day({ day, rowIdx, userEvt }) {
       : "";
   };
 
+  console.log("filteredEvents  - Days", filteredEvents);
+
   return (
     <div className="day-area">
       <header className="day-header">
@@ -53,21 +54,30 @@ function Day({ day, rowIdx, userEvt }) {
           setShowEventModal(true);
         }}
       >
-        {userEvt.map((event, idx) => {
-          return (
-            <div
-              key={idx}
-              onClick={() => {
-                setSelectedEvent(event);
-                setDaySelected(day);
-                setShowEventModal(true);
-              }}
-              className={`event bg-${labels[event.owner - 1]}`}
-            >
-              {event.stitle}
-            </div>
-          );
-        })}
+        {Object.keys(filteredEvents).length === 0 &&
+        filteredEvents.constructor === Object
+          ? null
+          : userEvt.map((event, idx) => {
+              const filterState = filteredEvents.filter((value, idx, arr) => {
+                return value.user === event.uid;
+              });
+
+              if (filterState[0].state === true) {
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => {
+                      setSelectedEvent(event);
+                      setDaySelected(day);
+                      setShowEventModal(true);
+                    }}
+                    className={`event bg-${labels[event.owner - 1]}`}
+                  >
+                    {event.stitle}
+                  </div>
+                );
+              }
+            })}
       </div>
     </div>
   );
