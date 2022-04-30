@@ -6,10 +6,8 @@ import GlobalContext from "../context/GlobalContext";
 
 function Month({ month }) {
   const [userEvent, setUserEvent] = useState([]);
-  const { monthIndex, STORAGE_USER_CHECK, setUserMonthEvents } =
+  const { monthIndex, STORAGE_USER_CHECK, setUserMonthEvents, showEventModal } =
     useContext(GlobalContext);
-
-  console.log("userEvent IN MONTH", userEvent);
 
   const getDayUserCheck = (day, idx, index) => {
     let prevData = new Array();
@@ -40,7 +38,7 @@ function Month({ month }) {
     ).then((res) => {
       setUserEvent(res);
     });
-  }, [monthIndex]);
+  }, [monthIndex, showEventModal]);
 
   useEffect(() => {
     setUserMonthEvents(userEvent);

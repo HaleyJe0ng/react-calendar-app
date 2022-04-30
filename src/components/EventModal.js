@@ -8,6 +8,9 @@ import {
   faPencil,
   faTag,
 } from "@fortawesome/free-solid-svg-icons";
+import { getUserEvent } from "../utils/get-user-event";
+import { getSharedScheduleInfo } from "../utils/get-shared-schedule-info";
+import { deleteUserEvent } from "../utils/delete-user-event";
 
 function EventModal() {
   const {
@@ -17,6 +20,9 @@ function EventModal() {
     userKey,
     labels,
     sharedUser,
+    monthIndex,
+    sharedSchedule,
+    setSharedSchedule,
   } = useContext(GlobalContext);
 
   const [day, setDay] = useState(
@@ -27,25 +33,48 @@ function EventModal() {
   const [owner, setOwner] = useState(
     selectedEvent ? selectedEvent.owner : JSON.parse(userKey).uno
   );
-  const [share, setShare] = useState([]);
   const [eventKey, setEventKey] = useState(
     selectedEvent ? selectedEvent.sno : 0
   );
-  const [id, setId] = useState(selectedEvent ? selectedEvent.uid : "");
+  const [id, setId] = useState(
+    selectedEvent ? selectedEvent.uid : JSON.parse(userKey).uid
+  );
+
+  const [sharedScheduleInfo, setSharedScheduleInfo] = useState([]);
+  // const [checkedState, setCheckedState] = useState(
+  //   sharedUser !== []
+  //     ? sharedUser.map((usr) => {
+  //         return {
+  //           ...usr,
+  //           state: false,
+  //         };
+  //       })
+  //     : [
+  //         {
+  //           state: false,
+  //         },
+  //       ]
+  // );
 
   const [checkedState, setCheckedState] = useState(
     sharedUser !== []
       ? sharedUser.map((usr) => {
-          if (selectedEvent)
-            return usr.shared === selectedEvent.owner
-              ? { ...usr, state: true }
-              : { ...usr, state: false };
-          else return { ...usr, state: false };
+          return {
+            ...usr,
+            state: false,
+          };
         })
       : []
   );
 
   const handleOnClose = () => {
+    setShowEventModal(false);
+  };
+
+  const handleOnDelete = () => {
+    deleteUserEvent(eventKey).then((res) => {
+      console.log(res);
+    });
     setShowEventModal(false);
   };
 
@@ -57,25 +86,44 @@ function EventModal() {
         sno: eventKey,
         owner,
         uid: id,
-        share,
+        share: checkedState.filter((val) => val.state === true),
         stitle: title,
         sinfo: info,
         day: day,
       };
 
+      console.log("calendarEvent", calendarEvent);
+
       if (selectedEvent) {
         //id 같이 넣어줌
         //update
       } else {
-        //id 넣지 않음
-        //push
+        getUserEvent(
+          "CREATE",
+          JSON.parse(userKey).uno,
+          monthIndex,
+          calendarEvent
+        ).then((res) => {
+          console.log(res);
+        });
       }
-
       setShowEventModal(false);
     } else {
       alert("Please input the title!");
     }
   }
+
+  useEffect(() => {
+    if (selectedEvent) {
+      getSharedScheduleInfo(eventKey).then((res) => {
+        setSharedScheduleInfo(res);
+      });
+    }
+  }, [selectedEvent]);
+
+  useEffect(() => {
+    setSharedSchedule(sharedScheduleInfo);
+  }, [selectedEvent, sharedScheduleInfo]);
 
   return (
     <div className="event-modal-area">
@@ -83,10 +131,8 @@ function EventModal() {
         <header className="modal-header-area">
           {selectedEvent ? (
             <button
-              onClick={() => {
-                //delete
-                setShowEventModal(false);
-              }}
+              onClick={handleOnDelete}
+              disabled={owner === JSON.parse(userKey).uno ? false : true}
             >
               <FontAwesomeIcon icon={faTrashCan} className="ico-trash" />
             </button>
@@ -107,6 +153,7 @@ function EventModal() {
             onChange={(e) => setTitle(e.target.value)}
             className="title-input"
             required
+            disabled={owner === JSON.parse(userKey).uno ? false : true}
           />
           <div className="modal-col-area">
             <span>
@@ -122,6 +169,7 @@ function EventModal() {
                 e.preventDefault();
                 setDay(e.target.value);
               }}
+              disabled={owner === JSON.parse(userKey).uno ? false : true}
             />
           </div>
           <div className="modal-col-area">
@@ -136,6 +184,7 @@ function EventModal() {
               value={info}
               className="description-input"
               onChange={(e) => setInfo(e.target.value)}
+              disabled={owner === JSON.parse(userKey).uno ? false : true}
             />
           </div>
           <div className="modal-col-area labels-area">
@@ -145,44 +194,65 @@ function EventModal() {
 
             <div className="shared-list">
               <ul className="shared-items">
-                {sharedUser !== [] &&
+                {owner === JSON.parse(userKey).uno &&
+                sharedUser !== [] &&
+                sharedUser.length === checkedState.length ? (
                   sharedUser.map((sharedInfo, i) => {
                     return (
-                      <li key={`${i}-div`}>
-                        <label
-                          key={`${i}-lbl`}
-                          htmlFor={`shared-${sharedInfo.shared}`}
-                          className="shared-item"
-                        >
-                          {sharedInfo.user}
-                          <div
-                            className={`text-${labels[sharedInfo.shared - 1]}`}
+                      <div>
+                        <div>
+                          {sharedSchedule != [] &&
+                            sharedSchedule.map((info) => {
+                              if (sharedInfo.user === info.shared) {
+                                {
+                                  return `You shared this schedule with ${sharedInfo.user}`;
+                                }
+                              } else return "  ";
+                            })}
+                        </div>
+                        <li key={`${i}-li`}>
+                          <label
+                            key={`${i}-lbl`}
+                            htmlFor={`shared-${sharedInfo.shared}`}
+                            className="shared-item"
                           >
-                            <input
-                              key={`${i}-ipt`}
-                              id={`shared-${sharedInfo.shared}`}
-                              type="checkbox"
-                              value={sharedInfo.shared}
-                              checked={checkedState[i].state}
-                              onChange={() => {
-                                setCheckedState({
-                                  ...checkedState,
-                                  [i]: {
-                                    state: !checkedState[i].state,
-                                    user: checkedState[i].user,
-                                    shared: checkedState[i].shared,
-                                  },
-                                });
-                              }}
-                            />
-                            {checkedState[i].state && (
-                              <span className="check-mark"></span>
-                            )}
-                          </div>
-                        </label>
-                      </li>
+                            {sharedInfo.user}
+                            <div
+                              className={`text-${
+                                labels[sharedInfo.shared - 1]
+                              }`}
+                            >
+                              <input
+                                key={`${i}-ipt`}
+                                id={`shared-${sharedInfo.shared}`}
+                                type="checkbox"
+                                value={sharedInfo.shared}
+                                checked={checkedState[i].state}
+                                onChange={() => {
+                                  setCheckedState(
+                                    checkedState.map((v) =>
+                                      v.shared === checkedState[i].shared
+                                        ? {
+                                            ...v,
+                                            state: !checkedState[i].state,
+                                          }
+                                        : v
+                                    )
+                                  );
+                                }}
+                              />
+                              {checkedState[i].state && (
+                                <span className="check-mark"></span>
+                              )}
+                            </div>
+                          </label>
+                        </li>
+                      </div>
                     );
-                  })}
+                  })
+                ) : (
+                  <div>This is a shared schedule for {id}</div>
+                )}
               </ul>
             </div>
           </div>

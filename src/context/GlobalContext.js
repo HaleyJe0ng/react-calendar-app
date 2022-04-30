@@ -25,6 +25,9 @@ const GlobalContext = React.createContext({
   filteredEvents: [],
   setFilteredEvents: (filter) => {},
 
+  sharedSchedule: [],
+  setSharedSchedule: () => {},
+
   STORAGE_USER_CHECK: "user_key",
   userKey: null,
   setUserKey: (userStorage) => {},

@@ -25,9 +25,7 @@ function Calendar() {
       setSharedUserInfo(res);
       console.log("res", res);
     });
-  }, [userKey]);
-
-  console.log("sharedUser IN CALENDAR", sharedUser);
+  }, [userKey, showEventModal]);
 
   useEffect(() => {
     setSharedUser(sharedUserInfo);

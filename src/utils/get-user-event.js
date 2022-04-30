@@ -11,10 +11,14 @@ export async function getUserEvent(method, user_key, month, userEvt = null) {
   formdata.append("year", year);
   formdata.append("month", mth);
 
-  if (method === "UPDATE") {
-    //shared 정보 있을 경우 추가 업데이트!
+  if (method === "UPDATE" && userEvt !== null) {
+    formdata.append("userInfo", JSON.stringify(userEvt));
+    console.log(method, user_key, month, userEvt);
   }
-  console.log(mth);
+  if (method === "CREATE" && userEvt !== null) {
+    formdata.append("userInfo", JSON.stringify(userEvt));
+    console.log(method, user_key, month, userEvt);
+  }
 
   const serverRes = (res) => {
     switch (res) {
@@ -46,8 +50,8 @@ export async function getUserEvent(method, user_key, month, userEvt = null) {
       url = "update-schedule.php";
       break;
     }
-    case "DELETE": {
-      url = "delete-schedule.php";
+    case "CREATE": {
+      url = "input-schedule.php";
       break;
     }
     default: {
@@ -60,7 +64,7 @@ export async function getUserEvent(method, user_key, month, userEvt = null) {
     axios.default.withCredentials = true;
 
     const response = await axios({
-      method: method,
+      method: "POST",
       url: `${URL}${url}`,
       data: formdata,
     });

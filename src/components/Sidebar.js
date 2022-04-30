@@ -112,8 +112,6 @@ function Sidebar() {
                                   : val
                               )
                             );
-                            console.log("checkedState", checkedState);
-                            console.log("filteredEvent", filteredEvents);
                           }}
                         />
                         {checkedState[i].state && (

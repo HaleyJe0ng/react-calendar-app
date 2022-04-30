@@ -56,7 +56,7 @@ function Day({ day, rowIdx, userEvt }) {
         filteredEvents.constructor === Object
           ? null
           : userEvt.map((event, idx) => {
-              const filterState = filteredEvents.filter((value, idx, arr) => {
+              const filterState = filteredEvents.filter((value) => {
                 return value.user === event.uid;
               });
 

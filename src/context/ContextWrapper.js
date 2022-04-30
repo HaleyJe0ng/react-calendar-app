@@ -11,6 +11,7 @@ export default function ContextWrapper(props) {
   const [sharedUser, setSharedUser] = useState([]);
   const [labels, setLabels] = useState(["indigo", "red", "mint"]);
   const [filteredEvents, setFilteredEvents] = useState([]);
+  const [sharedSchedule, setSharedSchedule] = useState([]);
 
   const STORAGE_USER_CHECK = "user_key";
   const [userKey, setUserKey] = useState(
@@ -46,6 +47,8 @@ export default function ContextWrapper(props) {
         setSharedUser,
         filteredEvents,
         setFilteredEvents,
+        sharedSchedule,
+        setSharedSchedule,
         STORAGE_USER_CHECK,
         labels,
         setLabels,

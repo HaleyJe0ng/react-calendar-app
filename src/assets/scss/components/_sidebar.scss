@@ -78,7 +78,7 @@
         position: relative;
     
         .shared-items{
-            @include flex(column, flex-start, center);
+            @include flex(column, flex-start, flex-start);
     
             & li:not(:last-child){
                 padding-bottom: 1rem;
