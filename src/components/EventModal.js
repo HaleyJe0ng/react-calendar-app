@@ -91,12 +91,16 @@ function EventModal() {
         sinfo: info,
         day: day,
       };
-
       console.log("calendarEvent", calendarEvent);
-
       if (selectedEvent) {
-        //id 같이 넣어줌
-        //update
+        getUserEvent(
+          "UPDATE",
+          JSON.parse(userKey).uno,
+          monthIndex,
+          calendarEvent
+        ).then((res) => {
+          console.log("HERE! UPDATED!", res);
+        });
       } else {
         getUserEvent(
           "CREATE",
@@ -199,8 +203,8 @@ function EventModal() {
                 sharedUser.length === checkedState.length ? (
                   sharedUser.map((sharedInfo, i) => {
                     return (
-                      <div>
-                        <div>
+                      <div key={`${i}`}>
+                        <div key={`${i}`}>
                           {sharedSchedule != [] &&
                             sharedSchedule.map((info) => {
                               if (sharedInfo.user === info.shared) {

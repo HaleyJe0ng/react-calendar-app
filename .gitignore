@@ -4,7 +4,7 @@
 /src/context/ContextWrapper copy.js
 /src/context/GlobalContext copy.js
 /src/components/EventModal copy.js
-/src/db/update-schedule.php
+/src/db/update-schedule-backup.php
 
 # dependencies
 /node_modules

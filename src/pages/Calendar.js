@@ -10,20 +10,12 @@ import { getSharedUser } from "../utils/get-shared-user";
 function Calendar() {
   const [sharedUserInfo, setSharedUserInfo] = useState([]);
   const [currentMonth, setCurrentMonth] = useState(getMonth());
-  const {
-    monthIndex,
-    showEventModal,
-    userKey,
-    sharedUser,
-    setSharedUser,
-    filteredEvents,
-    setFilteredEvents,
-  } = useContext(GlobalContext);
+  const { monthIndex, showEventModal, userKey, setSharedUser } =
+    useContext(GlobalContext);
 
   useEffect(() => {
     getSharedUser(JSON.parse(userKey).uno).then((res) => {
       setSharedUserInfo(res);
-      console.log("res", res);
     });
   }, [userKey, showEventModal]);
 

@@ -40,13 +40,12 @@ export async function getSharedScheduleInfo(sno) {
 
     const resData = response?.data;
 
-    console.log("getsharedsch", resData);
+    console.log("getSharedScheduleInfo", resData);
 
     return resData.results ? resData.results : [];
   } catch (err) {
     if (!err?.response) {
       serverRes(err.response?.status);
-
       return [];
     }
   }
