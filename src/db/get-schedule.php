@@ -14,7 +14,7 @@ if (isset($_POST['uno']) && isset($_POST['year']) && isset($_POST['month'])) {
         exit();
     }else{
 
-    $sql = " ((SELECT sno, suno as uno, uid, sstartdate, stitle, sinfo FROM schedule, user WHERE suno = uno and uno = '$uno' AND YEAR(sstartdate)='$year' AND MONTH(sstartdate) BETWEEN '$month' AND '$month') UNION (SELECT sno, suno as uno, uid, sstartdate, stitle, sinfo FROM schedule, user WHERE sno IN (SELECT sno FROM schedule WHERE YEAR(sstartdate)='$year' AND MONTH(sstartdate) BETWEEN '$month' AND '$month' AND sno IN (SELECT dsno FROM sharedschedule, user WHERE uno = duno AND uno = '$uno')) AND uid = (SELECT uid FROM user WHERE uno = (SELECT suno FROM schedule WHERE YEAR(sstartdate)='$year' AND MONTH(sstartdate) BETWEEN '$month' AND '$month' AND sno IN (SELECT dsno FROM sharedschedule, user WHERE uno = duno AND uno = '$uno') GROUP BY suno))))ORDER BY sstartdate ASC;";
+    $sql = "((SELECT sno, suno as uno, uid, sstartdate, stitle, sinfo FROM schedule, user WHERE suno = uno and uno = '$uno' AND YEAR(sstartdate)='$year' AND MONTH(sstartdate) BETWEEN '$month' AND '$month') UNION (SELECT sno, suno as uno, uid, sstartdate, stitle, sinfo FROM schedule, user WHERE uno = suno AND sno IN (SELECT sno FROM schedule WHERE YEAR(sstartdate)='$year' AND MONTH(sstartdate) BETWEEN '$month' AND '$month' AND sno IN (SELECT dsno FROM sharedschedule, user WHERE uno = duno AND uno = '$uno')))) ORDER BY sstartdate ASC;";
 
     $result = mysqli_query($conn, $sql);
 
